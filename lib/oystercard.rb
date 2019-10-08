@@ -8,6 +8,7 @@ class Oystercard
   attr_reader :min_balance
   attr_reader :min_fare
   attr_reader :entry_station
+  attr_reader :stations
 
   def initialize
     @balance = 0
@@ -15,6 +16,8 @@ class Oystercard
     @min_balance = MIN_BALANCE
     @min_fare = MIN_FARE
     @entry_station
+    @exit_station
+    @stations = []
   end
 
   def top_up(deposit)
@@ -31,8 +34,10 @@ class Oystercard
     fail 'Not enough funds' if (@balance < min_balance)
   end
 
-  def touch_out
+  def touch_out(station)
     deduct(min_fare)
+    exit_station = get_station(station)
+    add_station
     @entry_station = nil
   end
 
@@ -44,6 +49,9 @@ class Oystercard
     @entry_station = station
   end
 
+   def add_station
+     @stations.push {'entry' => @entry_station, 'exit' => @exit_station}
+   end
   private
 
   def deduct(fare)

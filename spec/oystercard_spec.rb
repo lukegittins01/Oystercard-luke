@@ -66,4 +66,15 @@ describe Oystercard do
     expect(subject.entry_station).to be nil
   end
 
+
+  it 'pushes stations into a hash to store them' do
+    entry_station = double(:station)
+    exit_station = double(:station)
+    let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+    subject.top_up(1)
+    subject.touch_in(station1)
+    subject.touch_out(station2)
+    expect(subject.stations).to include? { 'entry' : station1, 'exit' : station2 }
+  end
+
 end
