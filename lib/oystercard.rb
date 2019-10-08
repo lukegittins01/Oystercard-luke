@@ -30,28 +30,26 @@ class Oystercard
   end
 
   def touch_in(station)
-    get_station(station)
+    @entry_station = station
     fail 'Not enough funds' if (@balance < min_balance)
   end
 
   def touch_out(station)
     deduct(min_fare)
-    exit_station = get_station(station)
+    @exit_station = station
     add_station
     @entry_station = nil
+    @exit_station = nil
   end
 
   def in_journey?
     entry_station != nil
   end
 
-  def get_station(station)
-    @entry_station = station
+  def add_station
+    @stations << {entry: @entry_station, exit: @exit_station}
   end
 
-   def add_station
-     @stations.push {'entry' => @entry_station, 'exit' => @exit_station}
-   end
   private
 
   def deduct(fare)

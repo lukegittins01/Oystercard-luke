@@ -46,7 +46,7 @@ describe Oystercard do
   it "can touch out" do
     subject.top_up(1)
     subject.touch_in('Acton Town')
-    subject.touch_out
+    subject.touch_out('Uxbridge')
     expect(subject).not_to be_in_journey
   end
 
@@ -56,25 +56,25 @@ describe Oystercard do
 
   it 'deducts minimum fare' do
     subject.top_up(10)
-    expect {subject.touch_out}.to change{subject.balance}.by(-2)
+    expect {subject.touch_out('Uxbridge')}.to change{subject.balance}.by(-2)
   end
 
   it 'sets station to nil' do
     subject.top_up(1)
     subject.touch_in('Acton Town')
-    subject.touch_out
+    subject.touch_out('Uxbridge')
     expect(subject.entry_station).to be nil
   end
 
 
   it 'pushes stations into a hash to store them' do
-    entry_station = double(:station)
-    exit_station = double(:station)
-    let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+    entry1 = double(:station)
+    exit1 = double(:station)
+    #let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
     subject.top_up(1)
-    subject.touch_in(station1)
-    subject.touch_out(station2)
-    expect(subject.stations).to include? { 'entry' : station1, 'exit' : station2 }
+    subject.touch_in(entry1)
+    subject.touch_out(exit1)
+    expect(subject.stations).to eq([{entry: entry1, exit: exit1}])
   end
 
 end
